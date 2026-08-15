@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>レシピ集</title>
+
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<link rel="icon" href="./favicon-32.png" sizes="32x32">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="レシピ集">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#fcfbf7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1a1a17" media="(prefers-color-scheme: dark)">
+<meta name="description" content="トレーニー向けの太りにくい作り置きレシピ集">
+
+<style>
+  :root{
+    --bg:#fcfbf7; --ink:#26251f; --muted:#6e6c62; --line:#e6e2d5; --card:#fff;
+    --lemon:#c19a1e; --lemon-soft:#fdf7e0;
+    --berry:#8c4a6b; --berry-soft:#f9eef3;
+    --good:#3f7d5c; --good-soft:#edf4f0;
+    --warn:#a8503c; --warn-soft:#faeeea;
+    --shadow:0 1px 3px rgba(0,0,0,.06),0 6px 18px rgba(0,0,0,.05);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --bg:#1a1a17; --ink:#edeae0; --muted:#a09e93; --line:#34332c; --card:#232320;
+      --lemon:#e0bc4c; --lemon-soft:#2c2817;
+      --berry:#d193b0; --berry-soft:#2a1d24;
+      --good:#87bf9f; --good-soft:#1e2923;
+      --warn:#e0917c; --warn-soft:#2c1f1b;
+      --shadow:0 1px 3px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.25); }
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
+    line-height:1.78;font-size:16px;
+    padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right);
+    -webkit-tap-highlight-color:transparent}
+  .wrap{max-width:760px;margin:0 auto;padding:0 20px calc(80px + env(safe-area-inset-bottom))}
+
+  nav{position:sticky;top:0;z-index:10;background:var(--bg);
+      border-bottom:1px solid var(--line);margin:0 -20px 26px;
+      padding:calc(14px + env(safe-area-inset-top)) 20px 12px;
+      -webkit-backdrop-filter:saturate(180%) blur(12px);backdrop-filter:saturate(180%) blur(12px)}
+  .navrow{display:flex;align-items:center;gap:9px;overflow-x:auto;
+          scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .navrow::-webkit-scrollbar{display:none}
+  .brand{font-weight:700;font-size:15px;letter-spacing:.02em;margin-right:3px;white-space:nowrap}
+  .chip{border:1px solid var(--line);background:var(--card);color:var(--muted);
+    border-radius:999px;padding:6px 14px;font-size:13px;cursor:pointer;
+    font-family:inherit;transition:.15s;white-space:nowrap;flex:none}
+  .chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+
+  h1{font-size:25px;line-height:1.4;margin:0 0 10px;letter-spacing:-.01em}
+  .lede{margin:0 0 6px;color:var(--muted);font-size:14.5px}
+  h2{font-size:18.5px;margin:44px 0 14px;padding-left:12px;border-left:4px solid var(--berry)}
+  h3{font-size:15px;margin:24px 0 8px;color:var(--muted);letter-spacing:.03em}
+  p{margin:0 0 12px}
+  .eyebrow{font-size:11.5px;letter-spacing:.16em;color:var(--berry);font-weight:700;margin:0 0 9px}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-top:22px}
+  .rcard{background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:18px 20px;cursor:pointer;transition:.18s;box-shadow:var(--shadow);text-align:left;
+    font-family:inherit;color:inherit;font-size:inherit;display:block;width:100%}
+  .rcard:active{transform:scale(.985)}
+  .rcard .t{font-size:16px;font-weight:700;line-height:1.45;margin-bottom:6px}
+  .rcard .d{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:12px}
+  .tags{display:flex;flex-wrap:wrap;gap:6px}
+  .tg{font-size:11px;background:var(--berry-soft);color:var(--berry);
+    border-radius:999px;padding:2px 9px;font-weight:700}
+  .kcal{font-variant-numeric:tabular-nums;font-size:12.5px;color:var(--muted);margin-top:10px}
+  .empty{border:1.5px dashed var(--line);border-radius:14px;padding:22px 20px;
+    color:var(--muted);font-size:13.5px;text-align:center;display:flex;align-items:center;justify-content:center}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:16px 0}
+  .box{border-radius:10px;padding:15px 17px;margin:16px 0;font-size:14.5px;border:1px solid var(--line)}
+  .box.key{background:var(--berry-soft);border-left:4px solid var(--berry)}
+  .box.lem{background:var(--lemon-soft);border-left:4px solid var(--lemon)}
+  .box.no{background:var(--warn-soft);border-left:4px solid var(--warn)}
+  .box.yes{background:var(--good-soft);border-left:4px solid var(--good)}
+  .box p:last-child{margin-bottom:0}
+  ul,ol{margin:0 0 12px;padding-left:1.3em}
+  li{margin-bottom:8px}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.5px}
+  th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-weight:700;color:var(--muted);font-size:12px;letter-spacing:.06em;
+     border-bottom:2px solid var(--line);white-space:nowrap}
+  td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .amt{color:var(--muted);font-variant-numeric:tabular-nums}
+  .stats{display:flex;flex-wrap:wrap;gap:9px;margin:18px 0}
+  .stat{flex:1 1 88px;background:var(--good-soft);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+  .stat .k{font-size:11px;color:var(--muted);letter-spacing:.06em;margin-bottom:1px}
+  .stat .v{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.2}
+  .stat .u{font-size:12px;font-weight:400;color:var(--muted)}
+  ol.steps{counter-reset:s;list-style:none;padding-left:0;margin-top:18px}
+  ol.steps>li{counter-increment:s;position:relative;padding-left:40px;margin-bottom:18px}
+  ol.steps>li::before{content:counter(s);position:absolute;left:0;top:2px;width:27px;height:27px;
+    border-radius:50%;background:var(--ink);color:var(--bg);display:flex;align-items:center;
+    justify-content:center;font-size:13px;font-weight:700}
+  ol.steps b{display:block;margin-bottom:2px}
+  .g{color:var(--good);font-weight:700}
+  .y{color:var(--lemon);font-weight:700}
+  .back{background:none;border:none;color:var(--muted);font-family:inherit;font-size:13.5px;
+    cursor:pointer;padding:8px 0;margin-bottom:10px}
+  footer{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+
+  /* ---- 作った記録 ---- */
+  details.log{margin:22px 0 0;border:1px solid var(--line);border-radius:12px;background:var(--card);overflow:hidden}
+  details.log>summary{list-style:none;cursor:pointer;padding:14px 18px;font-weight:700;font-size:15px;
+    display:flex;align-items:center;justify-content:space-between;gap:10px}
+  details.log>summary::-webkit-details-marker{display:none}
+  details.log>summary::after{content:'▾';color:var(--muted);font-size:13px;transition:.2s}
+  details.log[open]>summary::after{transform:rotate(180deg)}
+  .logbody{padding:0 18px 18px;border-top:1px solid var(--line)}
+  .logform{display:grid;gap:8px;margin:14px 0}
+  .logform input,.logform textarea{font-family:inherit;font-size:15px;color:var(--ink);
+    background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:10px 12px;width:100%}
+  .logform textarea{min-height:66px;resize:vertical;line-height:1.6}
+  .btn{font-family:inherit;font-size:14px;font-weight:700;border-radius:999px;padding:9px 18px;
+    cursor:pointer;border:1px solid var(--ink);background:var(--ink);color:var(--bg)}
+  .btn.sub{background:transparent;color:var(--muted);border-color:var(--line);font-weight:400}
+  .btnrow{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .logitem{border-top:1px dashed var(--line);padding:12px 0;display:flex;gap:12px;align-items:flex-start}
+  .logitem .dt{font-variant-numeric:tabular-nums;font-size:12.5px;color:var(--berry);
+    font-weight:700;white-space:nowrap;padding-top:2px;min-width:74px}
+  .logitem .tx{flex:1;font-size:14.5px;line-height:1.65;white-space:pre-wrap;word-break:break-word}
+  .logitem .del{background:none;border:none;color:var(--muted);font-size:16px;cursor:pointer;padding:0 2px;line-height:1}
+  .logempty{color:var(--muted);font-size:13.5px;padding:14px 0 4px}
+  .tools{margin-top:34px;padding-top:18px;border-top:1px solid var(--line)}
+  .tools .btnrow{margin-top:10px}
+  .ver{color:var(--muted);font-size:12px;margin-top:14px;font-variant-numeric:tabular-nums}
+  .view{display:none}
+  .view.on{display:block;animation:fade .2s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+  @media(max-width:520px){h1{font-size:21px}.wrap{padding:0 16px calc(60px + env(safe-area-inset-bottom))}
+    nav{margin:0 -16px 22px;padding:calc(12px + env(safe-area-inset-top)) 16px 10px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav>
+  <div class="navrow">
+    <span class="brand">🍋 レシピ集</span>
+    <button class="chip on" data-go="index">一覧</button>
+    <button class="chip" data-go="muffin">レモンマフィン</button>
+  </div>
+</nav>
+
+<!-- ============ INDEX ============ -->
+<section id="index" class="view on">
+  <h1>レシピ集</h1>
+  <p class="lede">トレーニング前提の、太りにくい作り置きレシピ。新しく作ったらここに追加していきます。</p>
+
+  <div class="grid">
+    <button class="rcard" data-go="muffin">
+      <div class="t">フルーツぎっしり<br>レモンチーズケーキ・マフィン</div>
+      <div class="d">余ったレモンジャムを砂糖代わりに使い切る。バター・油脂ほぼゼロ。焼いて冷凍 → 自然解凍でお弁当まで通しで設計。</div>
+      <div class="tags">
+        <span class="tg">高タンパク</span><span class="tg">低脂質</span>
+        <span class="tg">冷凍ストック</span><span class="tg">弁当</span>
+      </div>
+      <div class="kcal">234 kcal ／ P 8.9g ／ F 7.2g ／ 糖質 32g（1個）</div>
+    </button>
+
+    <div class="empty">次のレシピはここに<br>追加されます</div>
+  </div>
+
+  <div class="tools">
+    <div style="font-size:13.5px;color:var(--muted)">記録はこの端末の中だけに保存されます。レシピを差し替えても消えません。</div>
+    <div class="btnrow">
+      <button class="btn sub" id="exp">記録を書き出す</button>
+      <button class="btn sub" id="imp">記録を読み込む</button>
+      <input type="file" id="impf" accept="application/json" hidden>
+    </div>
+    <div class="ver">レシピ集 v1.0</div>
+  </div>
+</section>
+
+<!-- ============ MUFFIN ============ -->
+<section id="muffin" class="view">
+  <button class="back" data-go="index">← 一覧にもどる</button>
+  <p class="eyebrow">BAKED GOODS</p>
+  <h1>フルーツぎっしり<br>レモンチーズケーキ・マフィン</h1>
+  <p class="lede">マフィン型6個分／実働20分＋浸水30分＋焼成30分</p>
+
+  <div class="stats">
+    <div class="stat"><div class="k">エネルギー</div><div class="v">234<span class="u"> kcal</span></div></div>
+    <div class="stat"><div class="k">タンパク質</div><div class="v">8.9<span class="u"> g</span></div></div>
+    <div class="stat"><div class="k">脂質</div><div class="v">7.2<span class="u"> g</span></div></div>
+    <div class="stat"><div class="k">糖質</div><div class="v">32<span class="u"> g</span></div></div>
+  </div>
+
+  <h2>買い足すもの</h2>
+  <p>オートミール ／ 米粉 ／ スキムミルク（脱脂粉乳） ／ ベーキングパウダー<br>
+  <span style="color:var(--muted);font-size:14px">※おからパウダーとホエイプロテインは買わないこと（理由は下）</span></p>
+
+  <h2>材料（マフィン型6個分）</h2>
+
+  <h3>■ フルーツ（合計235g）</h3>
+  <table>
+    <tr><td><strong>冷凍フルーツ</strong><br><span style="color:var(--muted);font-size:12.5px">凍ったまま使う</span></td><td class="num amt">200g</td></tr>
+    <tr><td>ドライシャインマスカット or レーズン<br><span style="color:var(--muted);font-size:12.5px">ぬるま湯に10分浸けて戻す</span></td><td class="num amt">15g</td></tr>
+    <tr><td>デーツ<br><span style="color:var(--muted);font-size:12.5px">刻んで熱湯大さじ2に浸す</span></td><td class="num amt">2粒 / 20g</td></tr>
+  </table>
+
+  <h3>■ 先にふやかす（30分〜前夜）</h3>
+  <table>
+    <tr><td>オートミール</td><td class="num amt">60g</td></tr>
+    <tr><td>無調整豆乳 or 牛乳</td><td class="num amt">40ml</td></tr>
+  </table>
+
+  <h3>■ 粉</h3>
+  <table>
+    <tr><td>米粉 <span style="color:var(--muted);font-size:13px">うち大さじ1はフルーツ用</span></td><td class="num amt">70g</td></tr>
+    <tr><td>スキムミルク（脱脂粉乳）</td><td class="num amt">20g</td></tr>
+    <tr><td>ベーキングパウダー</td><td class="num amt">7g / 小さじ1.75</td></tr>
+    <tr><td>塩</td><td class="num amt">1g</td></tr>
+  </table>
+
+  <h3>■ 混ぜるもの</h3>
+  <table>
+    <tr><td>卵</td><td class="num amt">2個</td></tr>
+    <tr><td>無脂肪ギリシャヨーグルト</td><td class="num amt">130g</td></tr>
+    <tr><td><strong>レモンジャム</strong></td><td class="num amt">60g</td></tr>
+    <tr><td>クリームチーズ <span style="color:var(--muted);font-size:13px">生地40g・トップ30g</span></td><td class="num amt">70g</td></tr>
+    <tr><td>米油 or 太白ごま油</td><td class="num amt">小さじ1</td></tr>
+  </table>
+
+  <h2>作り方</h2>
+  <ol class="steps">
+    <li><b>ふやかす（30分〜前夜）</b>オートミールに豆乳を注いで冷蔵庫へ。デーツは熱湯大さじ2、ドライフルーツはぬるま湯に10分。<strong>冷凍フルーツは冷凍庫から出さない。</strong></li>
+    <li><b>クリームチーズを柔らかく</b>70gを600Wで20〜30秒、マヨネーズくらいに。40gをボウルへ、30gは取り分け。冷たいまま混ぜるとダマが舌に当たります。</li>
+    <li><b>液体を混ぜる</b>クリームチーズ40gに卵・ギリシャヨーグルト・レモンジャム・油を加えてなめらかに。ふやけたオートミール（豆乳ごと）、潰したデーツ、水気を切ったドライフルーツも加える。</li>
+    <li><b>粉を加える</b>米粉（大さじ1を除く）・スキムミルク・BP・塩を合わせて加え、ゴムベラで粉が見えなくなるまで。米粉なので混ぜすぎても硬くならない。<strong>この時点でかなり固めが正解。</strong></li>
+    <li><b>冷凍フルーツを、直前に</b>ここで初めて冷凍庫から出す。取り分けた<strong>米粉大さじ1をまぶし</strong>、半量だけ生地に<strong>5回だけ</strong>混ぜる。混ぜすぎると色が滲む。</li>
+    <li><b>型に入れて、残り半量を上に</b>6等分し、残したフルーツを表面に押し込む。クリームチーズ30gも6つにちぎって乗せる。</li>
+    <li><b>焼く</b>180℃予熱で<strong>28〜32分</strong>。竹串に<strong>しっとりした生地が少しつく状態</strong>で出す。型のまま10分置く。</li>
+  </ol>
+
+  <div class="box key">
+    <p><strong>パサつかせない、たったひとつのコツ。</strong>焼きすぎないこと。竹串が「完全にきれいに抜ける」まで焼いたら、それはもう焼きすぎ。余熱で中心まで火が通ります。</p>
+    <p style="margin-top:10px"><strong>そして、翌日の方がおいしい。</strong>一晩置くと水分が全体に行き渡ってしっとりします。焼いた日に「思ったほどじゃないな」と感じても、翌朝もう一度食べて判断してください。</p>
+  </div>
+
+  <h2>失敗しないための原則</h2>
+
+  <div class="box no">
+    <p><strong>ザラつきの原因は2つ。両方使わない。</strong></p>
+    <ul style="margin:10px 0 0">
+      <li><strong>おからパウダー</strong> … 自重の3〜4倍の水を吸う。翌日には口の中の水分まで持っていかれる</li>
+      <li><strong>ホエイプロテイン</strong> … 加熱するとタンパク質が固まって水分を抱えられず、キシキシ・ゴムっぽくなる</li>
+    </ul>
+    <p style="margin-top:10px">→ 代わりに<strong>スキムミルク（脱脂粉乳）</strong>。タンパク質量は近いのに、焼き色と乳のコクが出て<u>味はむしろ良くなる</u>。</p>
+  </div>
+
+  <div class="box yes">
+    <p><strong>ミキサーの代わりは「浸水」。</strong>オートミールは30分以上浸せば粒感がほぼ消える。前夜からならなお良い。挽く工程が丸ごと不要になります。</p>
+    <p style="margin-top:10px"><strong>油小さじ1をケチらない。</strong>1個あたりたった6kcal。しっとり感への貢献は絶大で、ここを抜くと別物になります。</p>
+  </div>
+
+  <div class="box key">
+    <strong>フルーツを増やすときの原則。</strong><br>
+    かさは<u>冷凍フルーツ</u>で稼ぎ、ドライフルーツは<u>香り役</u>に絞る。ドライは水分が抜けている分、同じ重さなら生の4〜5倍の糖質がある（レーズン30g と ブルーベリー30g で約4倍差）。<br><br>
+    フルーツを増やしたら必ず生地側も調整する（この配合は調整済み）：<strong>豆乳を減らす／米粉を増やす／BPを増やす</strong>。ここを変えずにフルーツだけ足すと確実にべちゃっとします。
+  </div>
+
+  <h2>冷凍フルーツの選び方</h2>
+  <table>
+    <tr><th>種類</th><th>評価</th><th>注意点</th></tr>
+    <tr><td>ブルーベリー</td><td class="g">◎ 最適</td><td>皮が丈夫で崩れず、水も出にくい。迷ったらこれ</td></tr>
+    <tr><td>ラズベリー</td><td class="g">◎</td><td>酸味がレモンと重なって輪郭が出る。混ぜるのは3回まで</td></tr>
+    <tr><td>ミックスベリー</td><td class="g">◎</td><td>そのまま200gでOK</td></tr>
+    <tr><td>いちご</td><td class="y">○</td><td>水分が多い。大きい粒は半分に切り、まぶす米粉を大さじ2に</td></tr>
+    <tr><td>マンゴー・パイン</td><td class="y">○</td><td>1.5cm角に切って150gまで。レモンとは意外と合う</td></tr>
+    <tr><td>バナナ</td><td class="g">◎ 別枠</td><td>混ぜ込まず<strong>潰して生地に</strong>。しっとり剤＆甘味。その場合デーツは抜く</td></tr>
+  </table>
+
+  <div class="box no">
+    <strong>やってはいけないこと。</strong>冷凍フルーツを解凍してから使うこと。ドリップで生地が水っぽくなり、色が滲んで濁った紫色になります。<strong>必ず凍ったまま、粉をまぶして、最後に。</strong>
+  </div>
+
+  <h2>冷凍と、お弁当への持っていき方</h2>
+
+  <h3>焼いて冷凍する</h3>
+  <ol>
+    <li><strong>完全に冷ます。</strong>網の上で最低1時間。少しでも温かいうちにラップすると湯気が水滴になり、解凍時にべちゃつく</li>
+    <li><strong>紙のマフィンカップに入れたまま</strong>1個ずつラップ → ジップ袋へ。結露はラップの内側につくが、紙カップが吸ってくれる</li>
+    <li>保存<strong>3週間</strong>（フルーツ入りは水分が多いので短め）</li>
+  </ol>
+
+  <h3>お弁当に（自然解凍）</h3>
+  <p>油脂・糖・水分が多いケーキ寄りの生地なので、<strong>常温に戻ると普通にしっとりします</strong>。冷蔵庫より常温解凍の方が食感が良い。</p>
+  <p><strong>朝7時に冷凍庫から出して保冷剤と一緒に → 12時にちょうど食べ頃。</strong>着いたら冷蔵庫へ。</p>
+
+  <div class="box no">
+    <strong>夏場は保冷剤を必ず。</strong>ギリシャヨーグルト・卵・クリームチーズ入りで水分活性が高い生地です。市販の「自然解凍OK」冷凍食品は専用に殺菌設計されているので、前提が違います。
+  </div>
+
+  <h3>温め直し</h3>
+  <table>
+    <tr><th>環境</th><th>やり方</th></tr>
+    <tr><td><strong>医局（トースターあり）</strong></td><td><strong>自然解凍で中まで戻してから、トースター2〜3分。これが最適解。</strong>表面だけ水分が飛んで、中はしっとりのまま</td></tr>
+    <tr><td>家（トースターなし）</td><td>フライパン弱火・<strong>蓋をせず</strong>片面2分ずつ。蓋をすると蒸れる</td></tr>
+    <tr><td>オーブン</td><td>180℃で5分（確実だが1個のために予熱するのは面倒）</td></tr>
+    <tr><td>レンジのみ</td><td><strong>ラップを外して</strong>加熱し、そのまま1〜2分置く。蒸気が抜けて水っぽさが収まる</td></tr>
+  </table>
+
+  <h2>調整と、アレンジ</h2>
+  <div class="box lem">
+    <strong>糖質を下げたい日は。</strong>レモンジャムを45gに、デーツを1粒に → 約210kcal・糖質27g。フルーツの量はそのままで大丈夫です。
+  </div>
+
+  <div class="card">
+    <p><strong>甘くない版（さけるチーズ）</strong><br>
+    レモンジャムを30gに減らし、塩を2.5gに増やす。デーツを抜いて、さけるチーズ1本を裂いて混ぜ込む。焼き時間は同じ。</p>
+    <p style="margin-bottom:0"><strong>塩トマト甘納豆</strong><br>
+    生地に混ぜると溶けて重くなる。<strong>焼き上がりに2〜3粒トッピング</strong>が正解。塩気がレモンを立たせます。</p>
+  </div>
+
+  <h2>時短の仕込み</h2>
+  <div class="box yes">
+    米粉70g・スキムミルク20g・BP7g・塩1g を袋にまとめたものを<strong>6セット常温保存</strong>。前夜にオートミールを浸けるだけで、翌朝はボウル1つで混ぜて焼くだけ（実働5分）。週末に2バッチ焼いて冷凍すれば、平日の朝は解凍するだけです。
+  </div>
+
+
+  <details class="log" id="log-muffin">
+    <summary>🍳 作った記録</summary>
+    <div class="logbody">
+      <div class="logform">
+        <input type="date" id="ld-muffin">
+        <textarea id="lt-muffin" placeholder="使ったフルーツ、焼き時間、次はどうするか&#10;例）冷凍ブルーベリー200g / 180℃30分 / 少し焼きすぎた。次は28分"></textarea>
+        <div class="btnrow"><button class="btn" data-add="muffin">記録する</button></div>
+      </div>
+      <div id="ll-muffin"></div>
+    </div>
+  </details>
+
+  <footer>
+    栄養値は日本食品標準成分表ベースの概算。冷凍フルーツの種類とレモンジャムの糖度で数値は変わります。<br>
+    ジャムを使う前に、カビ・発泡・アルコール臭のチェックを。カビがあれば部分的に取り除かず全量廃棄してください。
+  </footer>
+</section>
+
+</div>
+
+<script>
+  function go(id){
+    document.querySelectorAll('.view').forEach(function(v){ v.classList.toggle('on', v.id===id) });
+    document.querySelectorAll('nav .chip').forEach(function(c){ c.classList.toggle('on', c.dataset.go===id) });
+    window.scrollTo(0,0);
+    if (location.hash !== '#'+id) history.replaceState(null,'','#'+id);
+  }
+  document.addEventListener('click', function(e){
+    var t = e.target.closest('[data-go]');
+    if(t) go(t.dataset.go);
+  });
+  // 開いたときに前回の位置を復元
+  if (location.hash && document.getElementById(location.hash.slice(1))) go(location.hash.slice(1));
+
+
+  // ===== 作った記録（この端末の中だけに保存）=====
+  var KEY = 'recipe_app_v1';
+  function load(){ try{ return JSON.parse(localStorage.getItem(KEY)) || {v:1,logs:{}} }catch(e){ return {v:1,logs:{}} } }
+  function save(d){ try{ localStorage.setItem(KEY, JSON.stringify(d)) }catch(e){ alert('保存できませんでした') } }
+  function esc(s){ return String(s).replace(/[&<>"]/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c] }) }
+  function fmt(iso){
+    var p = String(iso).split('-');
+    return p.length === 3 ? (p[0].slice(2) + '/' + p[1] + '/' + p[2]) : iso;
+  }
+  function today(){
+    var d = new Date(), z = function(n){ return (n<10?'0':'') + n };
+    return d.getFullYear() + '-' + z(d.getMonth()+1) + '-' + z(d.getDate());
+  }
+
+  function render(id){
+    var box = document.getElementById('ll-' + id);
+    if(!box) return;
+    var list = (load().logs[id] || []).slice().sort(function(a,b){ return a.date < b.date ? 1 : -1 });
+    var sum = document.querySelector('#log-' + id + ' > summary');
+    if(sum) sum.firstChild.nodeValue = '🍳 作った記録' + (list.length ? '（' + list.length + '回）' : '');
+    if(!list.length){ box.innerHTML = '<div class="logempty">まだ記録がありません。焼いたら1行でも残しておくと、次に活きます。</div>'; return }
+    box.innerHTML = list.map(function(r){
+      return '<div class="logitem"><div class="dt">' + fmt(r.date) + '</div>' +
+             '<div class="tx">' + esc(r.note) + '</div>' +
+             '<button class="del" data-del="' + id + '|' + r.id + '" aria-label="削除">×</button></div>';
+    }).join('');
+  }
+
+  document.addEventListener('click', function(e){
+    var add = e.target.closest('[data-add]');
+    if(add){
+      var id = add.dataset.add;
+      var dt = document.getElementById('ld-' + id), tx = document.getElementById('lt-' + id);
+      var note = tx.value.trim();
+      if(!note){ tx.focus(); return }
+      var d = load();
+      (d.logs[id] = d.logs[id] || []).push({ id: String(Date.now()), date: dt.value || today(), note: note });
+      save(d); tx.value = ''; dt.value = today(); render(id);
+    }
+    var del = e.target.closest('[data-del]');
+    if(del){
+      var parts = del.dataset.del.split('|');
+      if(!confirm('この記録を削除しますか？')) return;
+      var dd = load();
+      dd.logs[parts[0]] = (dd.logs[parts[0]] || []).filter(function(r){ return r.id !== parts[1] });
+      save(dd); render(parts[0]);
+    }
+  });
+
+  // 書き出し / 読み込み
+  var expBtn = document.getElementById('exp');
+  if(expBtn) expBtn.addEventListener('click', function(){
+    var blob = new Blob([JSON.stringify(load(), null, 2)], {type:'application/json'});
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'レシピ集_記録_' + today() + '.json';
+    a.click(); URL.revokeObjectURL(a.href);
+  });
+  var impBtn = document.getElementById('imp'), impF = document.getElementById('impf');
+  if(impBtn) impBtn.addEventListener('click', function(){ impF.click() });
+  if(impF) impF.addEventListener('change', function(){
+    var f = impF.files[0]; if(!f) return;
+    var r = new FileReader();
+    r.onload = function(){
+      try{
+        var d = JSON.parse(r.result);
+        if(!d || typeof d.logs !== 'object') throw 0;
+        if(!confirm('今の記録を、読み込むファイルの内容で置き換えます。よろしいですか？')) return;
+        save(d); ['muffin'].forEach(render); alert('読み込みました');
+      }catch(e){ alert('このファイルは読み込めませんでした') }
+      impF.value = '';
+    };
+    r.readAsText(f);
+  });
+
+  // 初期化
+  ['muffin'].forEach(function(id){
+    var dt = document.getElementById('ld-' + id);
+    if(dt) dt.value = today();
+    render(id);
+  });
+
+  // オフライン対応
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function(){
+      navigator.serviceWorker.register('./sw.js').catch(function(){});
+    });
+  }
+</script>
+</body>
+</html>

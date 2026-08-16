@@ -180,7 +180,7 @@
       <button class="btn sub" id="imp">記録を読み込む</button>
       <input type="file" id="impf" accept="application/json" hidden>
     </div>
-    <div class="ver">レシピ集 v1.2</div>
+    <div class="ver">レシピ集 v1.3</div>
   </div>
 </section>
 
@@ -617,6 +617,12 @@
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function(){
       navigator.serviceWorker.register('./sw.js').catch(function(){});
+    });
+    // 新しいService Workerが有効になったら、1回だけ自動リロードして最新に切り替える。
+    // （古いHTMLを掴んだまま何度開いても直らない、という状態を防ぐため）
+    var swReloaded = false;
+    navigator.serviceWorker.addEventListener('message', function(e){
+      if (e.data === 'reload' && !swReloaded) { swReloaded = true; location.reload(); }
     });
   }
 </script>

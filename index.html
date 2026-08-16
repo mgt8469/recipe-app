@@ -64,9 +64,21 @@
   .tags{display:flex;flex-wrap:wrap;gap:6px}
   .tg{font-size:11px;background:var(--berry-soft);color:var(--berry);
     border-radius:999px;padding:2px 9px;font-weight:700}
-  .kcal{font-variant-numeric:tabular-nums;font-size:12.5px;color:var(--muted);margin-top:10px}
+  .meta{display:flex;flex-direction:column;align-items:flex-start;gap:5px;margin-top:10px}
+  .kcal{font-variant-numeric:tabular-nums;font-size:12.5px;color:var(--muted)}
+  .badge{font-size:11px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums;
+    border:1px solid var(--line);border-radius:999px;padding:1px 9px}
+  .badge.has{color:var(--good);border-color:var(--good);background:var(--good-soft);font-weight:700}
   .empty{border:1.5px dashed var(--line);border-radius:14px;padding:22px 20px;
     color:var(--muted);font-size:13.5px;text-align:center;display:flex;align-items:center;justify-content:center}
+
+  /* ---- タグ絞り込み ---- */
+  .filters{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0 0}
+  .fchip{border:1px solid var(--line);background:var(--card);color:var(--muted);
+    border-radius:999px;padding:5px 13px;font-size:12.5px;cursor:pointer;
+    font-family:inherit;transition:.15s;line-height:1.5}
+  .fchip.on{background:var(--berry);color:#fff;border-color:var(--berry)}
+  .filters:empty{display:none}
 
   .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:16px 0}
   .box{border-radius:10px;padding:15px 17px;margin:16px 0;font-size:14.5px;border:1px solid var(--line)}
@@ -139,8 +151,6 @@
   <div class="navrow">
     <span class="brand">🍋 レシピ集</span>
     <button class="chip on" data-go="index">一覧</button>
-    <button class="chip" data-go="muffin">レモンマフィン</button>
-    <button class="chip" data-go="salmon">鮭とゆで卵</button>
   </div>
 </nav>
 
@@ -148,6 +158,8 @@
 <section id="index" class="view on">
   <h1>レシピ集</h1>
   <p class="lede">トレーニング前提の、太りにくい作り置きレシピ。新しく作ったらここに追加していきます。</p>
+
+  <div class="filters" id="filters"></div>
 
   <div class="grid">
     <button class="rcard" data-go="muffin">
@@ -157,7 +169,10 @@
         <span class="tg">高タンパク</span><span class="tg">低脂質</span>
         <span class="tg">冷凍ストック</span><span class="tg">弁当</span>
       </div>
-      <div class="kcal">234 kcal ／ P 8.9g ／ F 7.2g ／ 糖質 32g（1個）</div>
+      <div class="meta">
+        <span class="kcal">234 kcal ／ P 8.9g ／ F 7.2g ／ 糖質 32g（1個）</span>
+        <span class="badge"></span>
+      </div>
     </button>
 
     <button class="rcard" data-go="salmon">
@@ -167,10 +182,14 @@
         <span class="tg">高タンパク</span><span class="tg">低糖質</span>
         <span class="tg">作り置き</span><span class="tg">弁当</span>
       </div>
-      <div class="kcal">267 kcal ／ P 29.8g ／ F 13.9g ／ 糖質 5.2g（1食）</div>
+      <div class="meta">
+        <span class="kcal">267 kcal ／ P 29.8g ／ F 13.9g ／ 糖質 5.2g（1食）</span>
+        <span class="badge"></span>
+      </div>
     </button>
 
-    <div class="empty">次のレシピはここに<br>追加されます</div>
+    <div class="empty" id="ph">次のレシピはここに<br>追加されます</div>
+    <div class="empty" id="nohit" style="display:none">このタグのレシピは<br>まだありません</div>
   </div>
 
   <div class="tools">
@@ -545,7 +564,24 @@
     return d.getFullYear() + '-' + z(d.getMonth()+1) + '-' + z(d.getDate());
   }
 
+  // 一覧のカードからレシピIDを拾う（レシピを足したらカードを足すだけでいい）
+  var CARDS = Array.prototype.slice.call(document.querySelectorAll('#index .rcard'));
+  var IDS = CARDS.map(function(c){ return c.dataset.go });
+
+  // カードに「作った回数」を出す（読むだけ。保存データはいじらない）
+  function badges(){
+    var logs = load().logs || {};
+    CARDS.forEach(function(c){
+      var b = c.querySelector('.badge');
+      if(!b) return;
+      var n = (logs[c.dataset.go] || []).length;
+      b.textContent = n ? '🍳 ' + n + '回' : 'まだ作ってない';
+      b.className = 'badge' + (n ? ' has' : '');
+    });
+  }
+
   function render(id){
+    badges();
     var box = document.getElementById('ll-' + id);
     if(!box) return;
     var list = (load().logs[id] || []).slice().sort(function(a,b){ return a.date < b.date ? 1 : -1 });
@@ -599,34 +635,70 @@
         var d = JSON.parse(r.result);
         if(!d || typeof d.logs !== 'object') throw 0;
         if(!confirm('今の記録を、読み込むファイルの内容で置き換えます。よろしいですか？')) return;
-        save(d); ['muffin','salmon'].forEach(render); alert('読み込みました');
+        save(d); IDS.forEach(render); alert('読み込みました');
       }catch(e){ alert('このファイルは読み込めませんでした') }
       impF.value = '';
     };
     r.readAsText(f);
   });
 
+  // ===== タグで絞り込み =====
+  // チップはカードに書いてあるタグから自動で作る。
+  // レシピを足すときは、カードに <span class="tg">タグ名</span> を書けば選択肢も増える。
+  (function(){
+    var bar = document.getElementById('filters');
+    var ph = document.getElementById('ph'), noHit = document.getElementById('nohit');
+    if(!bar || !CARDS.length) return;
+
+    var tags = [];
+    CARDS.forEach(function(c){
+      Array.prototype.forEach.call(c.querySelectorAll('.tg'), function(t){
+        var v = t.textContent.trim();
+        if(v && tags.indexOf(v) < 0) tags.push(v);
+      });
+    });
+    if(!tags.length) return;
+
+    bar.innerHTML = '<button class="fchip on" data-tag="">すべて</button>' +
+      tags.map(function(t){
+        return '<button class="fchip" data-tag="' + esc(t) + '">' + esc(t) + '</button>';
+      }).join('');
+
+    function apply(tag){
+      var hit = 0;
+      CARDS.forEach(function(c){
+        var ok = !tag || Array.prototype.some.call(c.querySelectorAll('.tg'), function(t){
+          return t.textContent.trim() === tag;
+        });
+        c.style.display = ok ? '' : 'none';
+        if(ok) hit++;
+      });
+      if(ph) ph.style.display = tag ? 'none' : '';
+      if(noHit) noHit.style.display = hit ? 'none' : '';
+    }
+
+    bar.addEventListener('click', function(e){
+      var b = e.target.closest('.fchip');
+      if(!b) return;
+      Array.prototype.forEach.call(bar.querySelectorAll('.fchip'), function(c){
+        c.classList.toggle('on', c === b);
+      });
+      apply(b.dataset.tag);
+    });
+  })();
+
   // 初期化
-  ['muffin','salmon'].forEach(function(id){
+  IDS.forEach(function(id){
     var dt = document.getElementById('ld-' + id);
     if(dt) dt.value = today();
     render(id);
   });
+  badges();
 
   // オフライン対応
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function(){
       navigator.serviceWorker.register('./sw.js').catch(function(){});
-    });
-    // 古いService Workerから新しい版に入れ替わったときだけ、1回リロードして最新に切り替える。
-    // （古いHTMLを掴んだまま何度開いても直らない、という状態を防ぐため）
-    // 初回インストール時は hadController が false なのでリロードしない。
-    var hadController = !!navigator.serviceWorker.controller;
-    var swReloaded = false;
-    navigator.serviceWorker.addEventListener('message', function(e){
-      if (e.data === 'reload' && hadController && !swReloaded) {
-        swReloaded = true; location.reload();
-      }
     });
   }
 </script>

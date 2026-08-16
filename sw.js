@@ -31,60 +31,27 @@ self.addEventListener('activate', function (e) {
         );
       })
       .then(function () { return self.clients.claim(); })
-      // 新しいSWが動き出したら、開いているページを1回だけリロードさせる。
-      // これがないと「古いHTMLのまま1回分ズレる」状態が残ります。
-      .then(function () {
-        return self.clients.matchAll({ type: 'window' }).then(function (list) {
-          list.forEach(function (c) { c.postMessage('reload'); });
-        });
-      })
   );
 });
 
-// ページ本体（HTML）は network-first。
-// オンラインなら必ず最新を表示し、取れなかったときだけキャッシュを使う。
-// ※ 以前は全部 stale-while-revalidate だったため、更新が1回分遅れて反映されていました。
-function networkFirst(req) {
-  return fetch(req).then(function (res) {
-    if (res && res.status === 200) {
-      const copy = res.clone();
-      caches.open(CACHE).then(function (c) { c.put(req, copy); });
-    }
-    return res;
-  }).catch(function () {
-    return caches.match(req).then(function (hit) {
-      return hit || caches.match('./index.html');
-    });
-  });
-}
-
-// アイコンなどの静的ファイルは stale-while-revalidate のままでよい。
-// （中身が変わらないので、即座に返せるほうが速い）
-function staleWhileRevalidate(req) {
-  return caches.match(req).then(function (cached) {
-    const network = fetch(req).then(function (res) {
-      if (res && res.status === 200) {
-        const copy = res.clone();
-        caches.open(CACHE).then(function (c) { c.put(req, copy); });
-      }
-      return res;
-    }).catch(function () { return cached; });
-
-    return cached || network;
-  });
-}
-
+// stale-while-revalidate:
+// キャッシュを即座に返しつつ、裏で最新を取りに行って次回に備える。
+// → オフラインでも開けて、オンラインなら次に開いたとき最新になる。
 self.addEventListener('fetch', function (e) {
   if (e.request.method !== 'GET') return;
+  if (new URL(e.request.url).origin !== location.origin) return;
 
-  const url = new URL(e.request.url);
-  if (url.origin !== location.origin) return;
+  e.respondWith(
+    caches.match(e.request).then(function (cached) {
+      const network = fetch(e.request).then(function (res) {
+        if (res && res.status === 200) {
+          const copy = res.clone();
+          caches.open(CACHE).then(function (c) { c.put(e.request, copy); });
+        }
+        return res;
+      }).catch(function () { return cached; });
 
-  const isPage =
-    e.request.mode === 'navigate' ||
-    e.request.destination === 'document' ||
-    url.pathname === '/recipe-app/' ||
-    url.pathname.endsWith('/index.html');
-
-  e.respondWith(isPage ? networkFirst(e.request) : staleWhileRevalidate(e.request));
+      return cached || network;
+    })
+  );
 });

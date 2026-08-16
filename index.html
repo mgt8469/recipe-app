@@ -12,18 +12,26 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="レシピ集">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="theme-color" content="#faf6ec">
+<meta name="theme-color" content="#fcfbf7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1a1a17" media="(prefers-color-scheme: dark)">
 <meta name="description" content="トレーニー向けの太りにくい作り置きレシピ集">
 
 <style>
   :root{
-    color-scheme: light;
-    --bg:#faf6ec; --ink:#33302a; --muted:#7a7365; --line:#e5dcc8; --card:#fffdf7;
-    --lemon:#b08a16; --lemon-soft:#f7eecf;
-    --berry:#8a4a68; --berry-soft:#f4e7ec;
-    --good:#3d7857; --good-soft:#e8f0e8;
-    --warn:#a34e3a; --warn-soft:#f7e8e2;
-    --shadow:0 1px 2px rgba(90,75,45,.05),0 6px 18px rgba(90,75,45,.06);
+    --bg:#fcfbf7; --ink:#26251f; --muted:#6e6c62; --line:#e6e2d5; --card:#fff;
+    --lemon:#c19a1e; --lemon-soft:#fdf7e0;
+    --berry:#8c4a6b; --berry-soft:#f9eef3;
+    --good:#3f7d5c; --good-soft:#edf4f0;
+    --warn:#a8503c; --warn-soft:#faeeea;
+    --shadow:0 1px 3px rgba(0,0,0,.06),0 6px 18px rgba(0,0,0,.05);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --bg:#1a1a17; --ink:#edeae0; --muted:#a09e93; --line:#34332c; --card:#232320;
+      --lemon:#e0bc4c; --lemon-soft:#2c2817;
+      --berry:#d193b0; --berry-soft:#2a1d24;
+      --good:#87bf9f; --good-soft:#1e2923;
+      --warn:#e0917c; --warn-soft:#2c1f1b;
+      --shadow:0 1px 3px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.25); }
   }
   *{box-sizing:border-box}
   html{-webkit-text-size-adjust:100%}
@@ -140,6 +148,7 @@
     <span class="brand">🍋 レシピ集</span>
     <button class="chip on" data-go="index">一覧</button>
     <button class="chip" data-go="muffin">レモンマフィン</button>
+    <button class="chip" data-go="salmon">鮭とゆで卵</button>
   </div>
 </nav>
 
@@ -157,6 +166,16 @@
         <span class="tg">冷凍ストック</span><span class="tg">弁当</span>
       </div>
       <div class="kcal">234 kcal ／ P 8.9g ／ F 7.2g ／ 糖質 32g（1個）</div>
+    </button>
+
+    <button class="rcard" data-go="salmon">
+      <div class="t">鮭とゆで卵の<br>塩昆布和え</div>
+      <div class="d">冷凍焼けした鮭を救出する、混ぜるだけの高タンパク作り置き。フライパン1つ、実働15分。糖質5gで白米なしでも満足する主菜。</div>
+      <div class="tags">
+        <span class="tg">高タンパク</span><span class="tg">低糖質</span>
+        <span class="tg">作り置き</span><span class="tg">弁当</span>
+      </div>
+      <div class="kcal">267 kcal ／ P 29.8g ／ F 13.9g ／ 糖質 5.2g（1食）</div>
     </button>
 
     <div class="empty">次のレシピはここに<br>追加されます</div>
@@ -338,6 +357,170 @@
   </footer>
 </section>
 
+<!-- ============ SALMON ============ -->
+<section id="salmon" class="view">
+  <button class="back" data-go="index">← 一覧にもどる</button>
+  <p class="eyebrow">MEAL PREP</p>
+  <h1>鮭とゆで卵の<br>塩昆布和え</h1>
+  <p class="lede">4〜5食分／実働15分＋解凍20分。冷凍焼けした鮭を救出するために設計したレシピ</p>
+
+  <div class="stats">
+    <div class="stat"><div class="k">エネルギー</div><div class="v">267<span class="u"> kcal</span></div></div>
+    <div class="stat"><div class="k">タンパク質</div><div class="v">29.8<span class="u"> g</span></div></div>
+    <div class="stat"><div class="k">脂質</div><div class="v">13.9<span class="u"> g</span></div></div>
+    <div class="stat"><div class="k">糖質</div><div class="v">5.2<span class="u"> g</span></div></div>
+    <div class="stat"><div class="k">食物繊維</div><div class="v">3.4<span class="u"> g</span></div></div>
+  </div>
+
+  <div class="box key">
+    <p><strong>このレシピの前提。</strong>5切れがくっついたまま冷凍して、冷凍焼けした鮭を使い切るために組んでいます。もちろん普通の鮭でも成立しますが、<u>パサつきと酸化臭を消す工程</u>が全体の設計思想になっているので、そこだけ省かないでください。</p>
+  </div>
+
+  <h2>材料（4〜5食分）</h2>
+
+  <h3>■ メイン</h3>
+  <table>
+    <tr><td><strong>生鮭（切り身）</strong><br><span style="color:var(--muted);font-size:12.5px">冷凍焼けしていてOK</span></td><td class="num amt">5切れ / 450g</td></tr>
+    <tr><td>卵</td><td class="num amt">5個</td></tr>
+    <tr><td>冷凍ブロッコリー<br><span style="color:var(--muted);font-size:12.5px">凍ったまま使う</span></td><td class="num amt">200g</td></tr>
+    <tr><td>冷凍コーン<br><span style="color:var(--muted);font-size:12.5px">凍ったまま使う。抜いてもいい</span></td><td class="num amt">100g</td></tr>
+  </table>
+
+  <h3>■ 下ごしらえ用</h3>
+  <table>
+    <tr><td>塩 <span style="color:var(--muted);font-size:13px">解凍する水1Lに対して</span></td><td class="num amt">大さじ2</td></tr>
+    <tr><td>酒</td><td class="num amt">大さじ1</td></tr>
+  </table>
+
+  <h3>■ 味つけ</h3>
+  <table>
+    <tr><td><strong>塩昆布</strong></td><td class="num amt">15g</td></tr>
+    <tr><td>ごま油</td><td class="num amt">大さじ1.5</td></tr>
+    <tr><td>酢</td><td class="num amt">小さじ2</td></tr>
+    <tr><td>しょうゆ</td><td class="num amt">小さじ1</td></tr>
+    <tr><td>白いりごま</td><td class="num amt">大さじ1</td></tr>
+  </table>
+
+  <h2>作り方</h2>
+  <ol class="steps">
+    <li><b>塩水で解凍する（20分）</b>フライパンに<strong>40℃くらいのぬるま湯1L＋塩大さじ2</strong>を張り、凍った塊のまま沈める。15分で5切れが自然に剥がれるので、バラしてさらに5分。<strong>中心まで解凍しなくていい。</strong>真水だとドリップが出てさらにパサつくので、必ず塩水で。</li>
+    <li><b>削いで、拭く</b>白く乾いた冷凍焼け部分と、黒ずんだ血合いを削ぐ。匂いの正体は皮下脂肪の酸化なので、鼻にくるなら皮も外す。酒をふって10分おき、ペーパーで水気を取る。</li>
+    <li><b>フライパンを拭いてから焼く</b>湯を捨てたら<strong>ペーパーでフライパンを完全に拭く。</strong>水が残っていると蒸し焼きになって焦げ目がつかない。空のまま中火で温め、ごま油大さじ1を引いて鮭を入れる。</li>
+    <li><b>2〜3分は触らない</b>半解凍のうちからほぐすと水が出て、白っぽいそぼろになります。<strong>片面に焼き色がついてから</strong>ヘラで割り、断面をまた焼きつける。皮は焼けると勝手に剥がれるので、そのタイミングで中骨ごとつまみ出す。<br><span style="color:var(--muted);font-size:13.5px">中心がまだ凍っていたら、酒大さじ1を回しかけて蓋を2分。焼き続けて待つと外側が硬くなります。</span></li>
+    <li><b>熱いうちに塩昆布を和える</b>鮭を取り出し、<strong>熱いうちに塩昆布15gと水（または酒）大さじ1をかけて置いておく。</strong>塩昆布が戻るときに出たうま味の汁を、熱い鮭が吸います。やっていることは焼き浸しと同じ。</li>
+    <li><b>同じフライパンで野菜を焼く</b>火を強め、<strong>凍ったままのブロッコリーとコーンを投入してしばらく触らない。</strong>水が飛んで焦げ目がつきます。鮭のうま味も拾ってくれる。<strong>鮭と一緒に炒めないこと</strong>（野菜の水で鮭が蒸される）。</li>
+    <li><b>卵は固ゆで9〜10分</b>半熟は作り置きに向きません。冷水にとって剥き、4等分くらいの乱切りに。</li>
+    <li><b>全部合わせる</b>ボウルで鮭・野菜・卵を合わせ、<strong>酢小さじ2・しょうゆ小さじ1・残りのごま油・白ごま</strong>で和える。卵は崩れすぎない程度に。</li>
+  </ol>
+
+  <div class="box key">
+    <p><strong>パサつかせない、たったひとつのコツ。</strong>焼き上がりの<u>熱いうちに油をまとわせること</u>。油膜が乾燥を止めるので、冷めてもパサつきません。冷凍焼けした身ほど効きます。</p>
+    <p style="margin-top:10px"><strong>酢は省かないこと。</strong>味の輪郭と日持ちの両方を担当しています。入れると4日目まで味がダレません。</p>
+  </div>
+
+  <h2>失敗しないための原則</h2>
+
+  <div class="box no">
+    <p><strong>水っぽくなる原因は3つ。全部つぶす。</strong></p>
+    <ul style="margin:10px 0 0">
+      <li><strong>冷凍野菜を茹でる</strong> … 茹でずに<u>凍ったまま焼く</u>。水が飛んで香ばしさまで手に入る</li>
+      <li><strong>鮭と野菜を一緒に炒める</strong> … 野菜から出た水で鮭が蒸される。<u>鮭を先に、野菜をあとに</u></li>
+      <li><strong>フライパンを拭かない</strong> … 解凍の湯を捨てただけでは水が残る。焦げ目がつかず、酸化臭が消えない</li>
+    </ul>
+  </div>
+
+  <div class="box yes">
+    <p><strong>だしで煮るより、焼いてから吸わせる。</strong>低温のだしで煮る手法は理屈としては正しいのですが、この料理には向きません。水分が増えて作り置きが持たないうえ、<u>酸化臭を一番強く覆い隠すのはメイラード反応の香ばしさ</u>だからです。焼いてから少量のだしを吸わせる「焼き浸し」なら、両方手に入ります。</p>
+    <p style="margin-top:10px"><strong>油をケチらない。</strong>1食あたり33kcal。ここを抜くと別物になります。</p>
+  </div>
+
+  <div class="box lem">
+    <strong>塩昆布がないときは。</strong>かつお節2パック（5g）＋しょうゆ大さじ1に置き換え。<u>かつお節のほうが作り置きには有利</u>で、余分な水分を吸ってくれるので4日目でも水っぽくなりません。めんつゆなら大さじ1弱＋水大さじ1、顆粒和風だしなら小さじ1/3＋水大さじ2＋塩ひとつまみ。
+  </div>
+
+  <h2>冷凍と、職場への持っていき方</h2>
+
+  <div class="box no">
+    <strong>ゆで卵は冷凍できません。</strong>白身の水分が氷の結晶になって離水するので、解凍するとスポンジかゴムのような食感になります（黄身は平気）。<strong>冷凍するときは卵だけ抜く。</strong>
+  </div>
+
+  <h3>冷蔵する場合</h3>
+  <ul>
+    <li><strong>3日</strong>。律速はゆで卵で、鮭と野菜だけなら4日もつ</li>
+    <li>取り分けは清潔な箸で。保存容器に直箸を入れないのが3日もたせるコツ</li>
+    <li><strong>ゆで卵は殻付きのままなら冷蔵1週間。</strong>剥いた瞬間に3日に落ちるので、殻が事実上の保存容器。後半に食べる分は殻付きで取り置き、当日剥いて合流させると余裕が出る</li>
+  </ul>
+
+  <h3>冷凍する場合</h3>
+  <ul>
+    <li><strong>卵を抜いた状態で</strong>1食ずつラップ → <strong>3週間</strong></li>
+    <li>ほぐした鮭は冷凍に向いています（鮭フレークが元々そういうもの）</li>
+    <li>前夜に冷蔵庫へ移して自然解凍、朝ゆで卵を足す</li>
+    <li>ブロッコリーは二度目の冷凍で少し柔らかくなるが、和え物なので気にならない</li>
+  </ul>
+
+  <h3>お弁当に</h3>
+  <p><strong>卵抜きの冷凍ブロックを凍ったまま持っていくのが、一番安全で一番ラク。</strong>それ自体が保冷剤になり、昼にはちょうど食べ頃に解けています。ゆで卵は別容器で持って、食べる直前に合流。</p>
+
+  <div class="box no">
+    <strong>夏場は保冷剤を必ず。</strong>魚・卵・加熱後に手で和えた料理という、一番気をつけたい組み合わせです。詰めるのは<strong>当日の朝</strong>、<strong>完全に冷めてから蓋</strong>（温かいまま閉じると結露して水滴が菌の温床になる）。
+  </div>
+
+  <h3>温め直し</h3>
+  <table>
+    <tr><th>環境</th><th>やり方</th></tr>
+    <tr><td><strong>医局（トースターあり）</strong></td><td>冷たいままでおいしい料理なので、基本は<strong>温めなくてよい</strong>。温めるならレンジ600Wで1分</td></tr>
+    <tr><td>家（トースターなし）</td><td>フライパン弱火・<strong>蓋をせず</strong>2分。蓋をすると蒸れて水っぽくなる</td></tr>
+    <tr><td>レンジのみ</td><td>ラップを外して1分。卵が入っているので加熱しすぎない</td></tr>
+  </table>
+
+  <h2>調整と、アレンジ</h2>
+
+  <div class="box lem">
+    <strong>糖質を下げたい日は。</strong>コーンを抜く → <strong>249kcal・糖質1.7g</strong>（食物繊維は2.4gに下がる）。糖質のほぼ全部がコーン由来なので、レバーはここ1本で足ります。逆に言えば<u>コーン100gを入れても1食あたり糖質+3.5g・+18kcal</u>なので、入れるデメリットはほぼありません。
+  </div>
+
+  <div class="card">
+    <p><strong>4日食べても飽きないための味変</strong>（食べる直前に足すだけ）<br>
+    ・柚子胡椒少々＋マヨ小さじ1 … 一番手っ取り早い<br>
+    ・叩き梅＋大葉 … 冷凍焼け臭が一番消える<br>
+    ・焼き海苔をちぎる＋ごま油 … 韓国風ナムル寄りに<br>
+    ・カレー粉小さじ1/4＋粒マスタード … 洋風に振れる</p>
+    <p style="margin-bottom:0"><strong>ベースブレッドに挟むなら</strong><br>
+    味つけを<strong>無糖ギリシャヨーグルト100g＋粒マスタード小さじ2＋レモン汁小さじ2＋オリーブオイル大さじ1</strong>に置き換える。玉ねぎ1/4個をみじん切りにして塩もみし、<u>しっかり絞ってから</u>加える（絞らないとパンが湿る）。パンは軽くトーストしてから挟むと、具の水分とちょうど釣り合います。</p>
+  </div>
+
+  <h2>数字の比較</h2>
+  <table>
+    <tr><th>　</th><th>kcal</th><th>タンパク質</th></tr>
+    <tr><td>この作り置き 1食</td><td class="num"><strong>267</strong></td><td class="num"><strong>29.8g</strong></td></tr>
+    <tr><td>コンビニのおにぎり 1個</td><td class="num">約180</td><td class="num">約4g</td></tr>
+    <tr><td>市販の鮭フレーク 大さじ3</td><td class="num">約60</td><td class="num">約5g</td></tr>
+    <tr><td>ベースブレッド プレーン 1袋</td><td class="num">200</td><td class="num">13.5g</td></tr>
+  </table>
+  <div class="box yes">
+    <strong>ベースブレッドと合わせると1食467kcal・タンパク質43g。</strong>ベースブレッドはビタミン・ミネラル33種と食物繊維を担当する一方、1袋のタンパク質は13.5gで増量にも減量にも足りません。公式は「2袋で1食」としていますが、<u>2袋にするより1袋＋この作り置きのほうが、同じくらいのカロリーでタンパク質が15g多く、糖質は20g少なくなる</u>。減量期はこちらが有利です。
+  </div>
+
+  <details class="log" id="log-salmon">
+    <summary>🍳 作った記録</summary>
+    <div class="logbody">
+      <div class="logform">
+        <input type="date" id="ld-salmon">
+        <textarea id="lt-salmon" placeholder="鮭の状態、焼き加減、味つけ、次はどうするか&#10;例）冷凍焼けあり / 塩水20分でちょうど剥がれた / コーン入れて正解"></textarea>
+        <div class="btnrow"><button class="btn" data-add="salmon">記録する</button></div>
+      </div>
+      <div id="ll-salmon"></div>
+    </div>
+  </details>
+
+  <footer>
+    栄養値は日本食品標準成分表2020年版（八訂）ベースの概算。鮭の切り身の重量とドリップ量で数値は変わります。食塩相当量は約1.1g／食。<br>
+    ぬるま湯での解凍は長時間放置しないこと。20分で引き上げて、そのまま加熱まで進めてください。
+  </footer>
+</section>
+
+
 </div>
 
 <script>
@@ -424,7 +607,7 @@
         var d = JSON.parse(r.result);
         if(!d || typeof d.logs !== 'object') throw 0;
         if(!confirm('今の記録を、読み込むファイルの内容で置き換えます。よろしいですか？')) return;
-        save(d); ['muffin'].forEach(render); alert('読み込みました');
+        save(d); ['muffin','salmon'].forEach(render); alert('読み込みました');
       }catch(e){ alert('このファイルは読み込めませんでした') }
       impF.value = '';
     };
@@ -432,7 +615,7 @@
   });
 
   // 初期化
-  ['muffin'].forEach(function(id){
+  ['muffin','salmon'].forEach(function(id){
     var dt = document.getElementById('ld-' + id);
     if(dt) dt.value = today();
     render(id);

@@ -199,7 +199,7 @@
       <button class="btn sub" id="imp">記録を読み込む</button>
       <input type="file" id="impf" accept="application/json" hidden>
     </div>
-    <div class="ver">レシピ集 v1.3</div>
+    <div class="ver">レシピ集 v1.4</div>
   </div>
 </section>
 
@@ -699,6 +699,16 @@
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function(){
       navigator.serviceWorker.register('./sw.js').catch(function(){});
+    });
+    // 古いService Workerから新しい版に入れ替わったときだけ、1回リロードして最新に切り替える。
+    // （古いHTMLを掴んだまま何度開いても直らない、という状態を防ぐため）
+    // 初回インストール時は hadController が false なのでリロードしない。
+    var hadController = !!navigator.serviceWorker.controller;
+    var swReloaded = false;
+    navigator.serviceWorker.addEventListener('message', function(e){
+      if (e.data === 'reload' && hadController && !swReloaded) {
+        swReloaded = true; location.reload();
+      }
     });
   }
 </script>

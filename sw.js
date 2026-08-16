@@ -1,7 +1,7 @@
 // レシピ集 — オフライン対応 Service Worker
 // レシピを更新したら、下の CACHE の数字を1つ上げてください（v1 → v2 → v3 ...）
 // そうしないとスマホ側に古いページが残り続けます。
-const CACHE = 'recipes-v2';
+const CACHE = 'recipes-v3';
 
 const ASSETS = [
   './',

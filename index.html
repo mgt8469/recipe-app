@@ -12,26 +12,18 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="レシピ集">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="theme-color" content="#fcfbf7" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#1a1a17" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#faf6ec">
 <meta name="description" content="トレーニー向けの太りにくい作り置きレシピ集">
 
 <style>
   :root{
-    --bg:#fcfbf7; --ink:#26251f; --muted:#6e6c62; --line:#e6e2d5; --card:#fff;
-    --lemon:#c19a1e; --lemon-soft:#fdf7e0;
-    --berry:#8c4a6b; --berry-soft:#f9eef3;
-    --good:#3f7d5c; --good-soft:#edf4f0;
-    --warn:#a8503c; --warn-soft:#faeeea;
-    --shadow:0 1px 3px rgba(0,0,0,.06),0 6px 18px rgba(0,0,0,.05);
-  }
-  @media (prefers-color-scheme: dark){
-    :root{ --bg:#1a1a17; --ink:#edeae0; --muted:#a09e93; --line:#34332c; --card:#232320;
-      --lemon:#e0bc4c; --lemon-soft:#2c2817;
-      --berry:#d193b0; --berry-soft:#2a1d24;
-      --good:#87bf9f; --good-soft:#1e2923;
-      --warn:#e0917c; --warn-soft:#2c1f1b;
-      --shadow:0 1px 3px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.25); }
+    color-scheme: light;
+    --bg:#faf6ec; --ink:#33302a; --muted:#7a7365; --line:#e5dcc8; --card:#fffdf7;
+    --lemon:#b08a16; --lemon-soft:#f7eecf;
+    --berry:#8a4a68; --berry-soft:#f4e7ec;
+    --good:#3d7857; --good-soft:#e8f0e8;
+    --warn:#a34e3a; --warn-soft:#f7e8e2;
+    --shadow:0 1px 2px rgba(90,75,45,.05),0 6px 18px rgba(90,75,45,.06);
   }
   *{box-sizing:border-box}
   html{-webkit-text-size-adjust:100%}
@@ -188,7 +180,7 @@
       <button class="btn sub" id="imp">記録を読み込む</button>
       <input type="file" id="impf" accept="application/json" hidden>
     </div>
-    <div class="ver">レシピ集 v1.1</div>
+    <div class="ver">レシピ集 v1.2</div>
   </div>
 </section>
 
